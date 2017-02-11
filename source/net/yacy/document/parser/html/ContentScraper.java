@@ -356,6 +356,16 @@ public class ContentScraper extends AbstractScraper implements Scraper {
             q = b.indexOf(" ", p + 1);
             u = b.substring(p, q < 0 ? b.length() : q);
             if (u.endsWith(".")) u = u.substring(0, u.length() - 1); // remove the '.' that was appended above
+            if (p > 0) {
+                // trim [url]/(url)/<url>
+                char pre = b.charAt(p-1);
+                char post = u.charAt(u.length() - 1);
+                if ((pre == '(' && post == ')') ||
+                    (pre == '[' && post == ']') ||
+                    (pre == '<' && post == '>')) {
+                    u = u.substring(0, u.length() - 1);
+                }
+            }
             s = p + 6;
             try {
                 this.addAnchor(new AnchorURL(u));
